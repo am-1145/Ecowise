@@ -20,7 +20,7 @@ export const Goals: React.FC = () => {
   const [forecast, setForecast] = useState<any>(null);
   const [loadingForecast, setLoadingForecast] = useState(true);
 
-  const API_URL = import.meta.env.VITE_API_URL || '/api';
+  const API_URL = (window as any).ENV?.VITE_API_URL && (window as any).ENV.VITE_API_URL !== '__VITE_API_URL__' ? (window as any).ENV.VITE_API_URL : import.meta.env.VITE_API_URL || '/api';
 
   useEffect(() => {
     fetchGoals();

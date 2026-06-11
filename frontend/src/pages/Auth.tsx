@@ -4,6 +4,7 @@ import { useStore } from '../store/useStore';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { ShieldCheck, Mail, Lock, User as UserIcon } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export const Auth: React.FC<{ type: 'login' | 'register' }> = ({ type }) => {
   const { setAuth } = useStore();
@@ -15,8 +16,6 @@ export const Auth: React.FC<{ type: 'login' | 'register' }> = ({ type }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  const API_URL = import.meta.env.VITE_API_URL || '/api';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
