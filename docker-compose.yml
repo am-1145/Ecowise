@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: ecowise_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - ecowise_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ecowise_backend
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/ecowise
+      - JWT_SECRET=super_secret_jwt_key_123456
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - EMAIL_SERVICE_KEY=${EMAIL_SERVICE_KEY}
+    depends_on:
+      - mongodb
+    networks:
+      - ecowise_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ecowise_frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:5000/api
+    depends_on:
+      - backend
+    networks:
+      - ecowise_network
+
+volumes:
+  mongo_data:
+
+networks:
+  ecowise_network:
+    driver: bridge
