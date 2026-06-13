@@ -3,6 +3,7 @@ import { useStore } from '../store/useStore';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { ShoppingBag, Heart, ShieldCheck, Tag, Info, ArrowUpRight } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export const Marketplace: React.FC = () => {
   const { products, transactions, token, fetchProducts, fetchTransactions, fetchProfile } = useStore();
@@ -16,7 +17,6 @@ export const Marketplace: React.FC = () => {
   const [fundingAmount, setFundingAmount] = useState(25.00);
   const [buyingStatus, setBuyingStatus] = useState(false);
 
-  const API_URL = (window as any).ENV?.VITE_API_URL && (window as any).ENV.VITE_API_URL !== '__VITE_API_URL__' ? (window as any).ENV.VITE_API_URL : import.meta.env.VITE_API_URL || '/api';
 
   useEffect(() => {
     fetchProducts();

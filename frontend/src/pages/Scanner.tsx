@@ -3,6 +3,7 @@ import { useStore } from '../store/useStore';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { QrCode, UploadCloud, FileText, CheckCircle2, ChevronRight, Info } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export const Scanner: React.FC = () => {
   const { token, fetchStats } = useStore();
@@ -14,7 +15,6 @@ export const Scanner: React.FC = () => {
   const [result, setResult] = useState<any>(null);
   const [analyses, setAnalyses] = useState<any[]>([]);
 
-  const API_URL = (window as any).ENV?.VITE_API_URL && (window as any).ENV.VITE_API_URL !== '__VITE_API_URL__' ? (window as any).ENV.VITE_API_URL : import.meta.env.VITE_API_URL || '/api';
 
   useEffect(() => {
     fetchHistory();

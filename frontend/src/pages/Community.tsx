@@ -3,6 +3,7 @@ import { useStore } from '../store/useStore';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { Users, Award, QrCode, PlusCircle, CheckCircle2 } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export const Community: React.FC = () => {
   const { challenges, token, user, fetchChallenges, fetchProfile } = useStore();
@@ -23,7 +24,6 @@ export const Community: React.FC = () => {
   const [joinedTeam, setJoinedTeam] = useState<any>(null);
   const [leaderboard, setLeaderboard] = useState<any[]>([]);
 
-  const API_URL = (window as any).ENV?.VITE_API_URL && (window as any).ENV.VITE_API_URL !== '__VITE_API_URL__' ? (window as any).ENV.VITE_API_URL : import.meta.env.VITE_API_URL || '/api';
 
   useEffect(() => {
     fetchChallenges();

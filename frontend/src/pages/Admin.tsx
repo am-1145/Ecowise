@@ -4,6 +4,7 @@ import { useAccessibility } from '../context/AccessibilityContext';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 import { ShieldCheck, ShieldAlert, Users, Award, TrendingUp } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export const Admin: React.FC = () => {
   const { user, token } = useStore();
@@ -13,7 +14,6 @@ export const Admin: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const API_URL = (window as any).ENV?.VITE_API_URL && (window as any).ENV.VITE_API_URL !== '__VITE_API_URL__' ? (window as any).ENV.VITE_API_URL : import.meta.env.VITE_API_URL || '/api';
 
   useEffect(() => {
     if (user?.role !== 'admin') {

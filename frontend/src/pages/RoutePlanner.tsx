@@ -3,6 +3,7 @@ import { useStore } from '../store/useStore';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { Map, Navigation, Compass, Search, Tag, Eye } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export const RoutePlanner: React.FC = () => {
   const { token } = useStore();
@@ -19,7 +20,6 @@ export const RoutePlanner: React.FC = () => {
   const [services, setServices] = useState<any[]>([]);
   const [loadingServices, setLoadingServices] = useState(true);
 
-  const API_URL = (window as any).ENV?.VITE_API_URL && (window as any).ENV.VITE_API_URL !== '__VITE_API_URL__' ? (window as any).ENV.VITE_API_URL : import.meta.env.VITE_API_URL || '/api';
 
   useEffect(() => {
     fetchNearbyPOIs();

@@ -3,6 +3,7 @@ import { useStore } from '../store/useStore';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { Award, CheckCircle2, ChevronRight, PlusCircle, Sparkles } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export const Goals: React.FC = () => {
   const { goals, token, fetchGoals, fetchStats } = useStore();
@@ -20,7 +21,6 @@ export const Goals: React.FC = () => {
   const [forecast, setForecast] = useState<any>(null);
   const [loadingForecast, setLoadingForecast] = useState(true);
 
-  const API_URL = (window as any).ENV?.VITE_API_URL && (window as any).ENV.VITE_API_URL !== '__VITE_API_URL__' ? (window as any).ENV.VITE_API_URL : import.meta.env.VITE_API_URL || '/api';
 
   useEffect(() => {
     fetchGoals();

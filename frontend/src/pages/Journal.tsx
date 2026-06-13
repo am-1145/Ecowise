@@ -3,6 +3,7 @@ import { useStore } from '../store/useStore';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { Calendar, Activity, BookOpen, Star, Sparkles } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export const Journal: React.FC = () => {
   const { token } = useStore();
@@ -18,7 +19,6 @@ export const Journal: React.FC = () => {
   const [logs, setLogs] = useState<any[]>([]);
   const [correlation, setCorrelation] = useState<any>(null);
 
-  const API_URL = (window as any).ENV?.VITE_API_URL && (window as any).ENV.VITE_API_URL !== '__VITE_API_URL__' ? (window as any).ENV.VITE_API_URL : import.meta.env.VITE_API_URL || '/api';
 
   useEffect(() => {
     fetchLogs();

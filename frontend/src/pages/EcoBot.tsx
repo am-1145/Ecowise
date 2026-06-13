@@ -3,6 +3,7 @@ import { useStore } from '../store/useStore';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { Bot, Send, Mic, Volume2, VolumeX, RefreshCw, Globe, Cpu } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 interface IMessage {
   role: 'user' | 'model';
@@ -44,7 +45,6 @@ export const EcoBot: React.FC = () => {
   const [listening, setListening] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const API_URL = (window as any).ENV?.VITE_API_URL && (window as any).ENV.VITE_API_URL !== '__VITE_API_URL__' ? (window as any).ENV.VITE_API_URL : import.meta.env.VITE_API_URL || '/api';
 
   useEffect(() => {
     const fetchHistory = async () => {

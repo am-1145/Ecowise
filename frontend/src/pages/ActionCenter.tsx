@@ -3,6 +3,7 @@ import { useStore } from '../store/useStore';
 import { useAccessibility } from '../context/AccessibilityContext';
 import { ListTodo, CheckCircle2, Circle, AlertCircle, Plus } from 'lucide-react';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 export const ActionCenter: React.FC = () => {
   const { actions, token, fetchActions, fetchProfile } = useStore();
@@ -21,7 +22,6 @@ export const ActionCenter: React.FC = () => {
   const [estimatedSavings, setEstimatedSavings] = useState(100);
   const [timeRequired, setTimeRequired] = useState('1 hour');
 
-  const API_URL = (window as any).ENV?.VITE_API_URL && (window as any).ENV.VITE_API_URL !== '__VITE_API_URL__' ? (window as any).ENV.VITE_API_URL : import.meta.env.VITE_API_URL || '/api';
 
   useEffect(() => {
     fetchActions();
