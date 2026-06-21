@@ -10,17 +10,34 @@ const app = express();
 // Security Hardening: Helmet sets secure HTTP headers to mitigate vulnerabilities (XSS, Clickjacking, etc.)
 app.use(helmet());
 
-// Enable Cross-Origin Resource Sharing for the frontend development port
-const allowedOrigins = (process.env.CORS_ORIGINS?.split(',') ?? ['http://localhost:5173']).map(o => o.trim());
+// Enable Cross-Origin Resource Sharing
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://ecowise-frontend-c-128712652017.europe-west1.run.app'
+];
+if (process.env.CORS_ORIGINS) {
+  process.env.CORS_ORIGINS.split(',').forEach(o => {
+    const trimmed = o.trim();
+    if (trimmed && !allowedOrigins.includes(trimmed)) {
+      allowedOrigins.push(trimmed);
+    }
+  });
+}
+
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-    return callback(new Error(msg), false);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    // Return null, false to safely deny CORS access instead of throwing a server-side Error,
+    // which would crash the preflight response pipeline.
+    return callback(null, false);
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 
 // Rate Limiting to prevent brute-force attacks and resource exhaustion
