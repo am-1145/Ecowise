@@ -1,5 +1,7 @@
-import nodemailer from 'dotenv';
+import dotenv from 'dotenv';
 import nodemailerLib from 'nodemailer';
+
+dotenv.config();
 
 export class MailService {
   private static transporter: any = null;

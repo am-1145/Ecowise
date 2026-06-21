@@ -29,19 +29,29 @@ export class MapService {
     walking: 0
   };
 
+  private static roundToTwo(val: number): number {
+    return Math.round(val * 100) / 100;
+  }
+
   /**
    * Calculate green routes from start to destination
    */
   static calculateRoutes(origin: string, destination: string): IRouteOption[] {
     // Generate deterministic distances based on the text length to make mock inputs look stable and realistic
     const mockDistance = Math.max(3, (origin.length + destination.length) % 35 + 2.4);
+    const drivingEmission = this.roundToTwo(mockDistance * this.EMISSIONS.driving);
+
+    const evEmission = this.roundToTwo(mockDistance * this.EMISSIONS.ev);
+    const transitEmission = this.roundToTwo(mockDistance * 1.1 * this.EMISSIONS.transit);
+    const cyclingEmission = 0;
+    const walkingEmission = 0;
 
     return [
       {
         mode: 'driving',
         distanceKm: mockDistance,
         durationMinutes: Math.round(mockDistance * 2.5),
-        carbonEmissionKg: Math.round(mockDistance * this.EMISSIONS.driving * 100) / 100,
+        carbonEmissionKg: drivingEmission,
         carbonSavedKg: 0,
         polyline: 'mock_driving_polyline'
       },
@@ -49,32 +59,32 @@ export class MapService {
         mode: 'ev',
         distanceKm: mockDistance,
         durationMinutes: Math.round(mockDistance * 2.5),
-        carbonEmissionKg: Math.round(mockDistance * this.EMISSIONS.ev * 100) / 100,
-        carbonSavedKg: Math.round(mockDistance * (this.EMISSIONS.driving - this.EMISSIONS.ev) * 100) / 100,
+        carbonEmissionKg: evEmission,
+        carbonSavedKg: this.roundToTwo(drivingEmission - evEmission),
         polyline: 'mock_ev_polyline'
       },
       {
         mode: 'transit',
-        distanceKm: mockDistance * 1.1,
+        distanceKm: this.roundToTwo(mockDistance * 1.1),
         durationMinutes: Math.round(mockDistance * 3.5),
-        carbonEmissionKg: Math.round(mockDistance * 1.1 * this.EMISSIONS.transit * 100) / 100,
-        carbonSavedKg: Math.round((mockDistance * this.EMISSIONS.driving - (mockDistance * 1.1 * this.EMISSIONS.transit)) * 100) / 100,
+        carbonEmissionKg: transitEmission,
+        carbonSavedKg: this.roundToTwo(drivingEmission - transitEmission),
         polyline: 'mock_transit_polyline'
       },
       {
         mode: 'cycling',
-        distanceKm: mockDistance * 0.95,
+        distanceKm: this.roundToTwo(mockDistance * 0.95),
         durationMinutes: Math.round(mockDistance * 4),
-        carbonEmissionKg: 0,
-        carbonSavedKg: Math.round(mockDistance * this.EMISSIONS.driving * 100) / 100,
+        carbonEmissionKg: cyclingEmission,
+        carbonSavedKg: this.roundToTwo(drivingEmission - cyclingEmission),
         polyline: 'mock_cycling_polyline'
       },
       {
         mode: 'walking',
-        distanceKm: mockDistance * 0.9,
+        distanceKm: this.roundToTwo(mockDistance * 0.9),
         durationMinutes: Math.round(mockDistance * 12),
-        carbonEmissionKg: 0,
-        carbonSavedKg: Math.round(mockDistance * this.EMISSIONS.driving * 100) / 100,
+        carbonEmissionKg: walkingEmission,
+        carbonSavedKg: this.roundToTwo(drivingEmission - walkingEmission),
         polyline: 'mock_walking_polyline'
       }
     ];

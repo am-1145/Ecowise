@@ -44,14 +44,15 @@ export const AccessibilityPanel: React.FC = () => {
           <div className="space-y-4">
             {/* Contrast adjustment */}
             <div>
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-2">
+              <span id="contrast-group-label" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-2">
                 Color Contrast
-              </label>
-              <div className="grid grid-cols-3 gap-2">
+              </span>
+              <div className="grid grid-cols-3 gap-2" role="group" aria-labelledby="contrast-group-label">
                 {(['normal', 'high', 'colorblind'] as const).map((mode) => (
                   <button
                     key={mode}
                     onClick={() => updateSettings({ contrast: mode })}
+                    aria-pressed={settings.contrast === mode}
                     className={`text-xs py-1.5 px-2 rounded font-medium border capitalize ${
                       settings.contrast === mode
                         ? 'bg-primary border-primary text-white'
@@ -66,14 +67,15 @@ export const AccessibilityPanel: React.FC = () => {
 
             {/* Font scaling */}
             <div>
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-2">
+              <span id="font-scale-group-label" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block mb-2">
                 Font Scaling
-              </label>
-              <div className="grid grid-cols-4 gap-1.5">
+              </span>
+              <div className="grid grid-cols-4 gap-1.5" role="group" aria-labelledby="font-scale-group-label">
                 {(['small', 'medium', 'large', 'xl'] as const).map((scale) => (
                   <button
                     key={scale}
                     onClick={() => updateSettings({ fontScale: scale })}
+                    aria-pressed={settings.fontScale === scale}
                     className={`text-xs py-1 px-1.5 rounded font-medium border capitalize ${
                       settings.fontScale === scale
                         ? 'bg-primary border-primary text-white'
@@ -92,36 +94,43 @@ export const AccessibilityPanel: React.FC = () => {
             <div className="space-y-3">
               {/* Dyslexia Font Toggle */}
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Dyslexia Friendly Font</span>
+                <label htmlFor="dyslexia-font-toggle" className="text-sm font-medium cursor-pointer">
+                  Dyslexia Friendly Font
+                </label>
                 <input
+                  id="dyslexia-font-toggle"
                   type="checkbox"
                   checked={settings.dyslexicFont}
                   onChange={(e) => updateSettings({ dyslexicFont: e.target.checked })}
-                  className="rounded border-border text-primary focus:ring-primary h-4 w-4"
+                  className="rounded border-border text-primary focus:ring-primary h-4 w-4 cursor-pointer"
                 />
               </div>
 
               {/* Reduced Motion Toggle */}
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Reduced Motion</span>
+                <label htmlFor="reduced-motion-toggle" className="text-sm font-medium cursor-pointer">
+                  Reduced Motion
+                </label>
                 <input
+                  id="reduced-motion-toggle"
                   type="checkbox"
                   checked={settings.reducedMotion}
                   onChange={(e) => updateSettings({ reducedMotion: e.target.checked })}
-                  className="rounded border-border text-primary focus:ring-primary h-4 w-4"
+                  className="rounded border-border text-primary focus:ring-primary h-4 w-4 cursor-pointer"
                 />
               </div>
 
               {/* Screen Reader TTS Toggle */}
               <div className="flex items-center justify-between">
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium flex items-center gap-1">
+                  <label htmlFor="screen-reader-toggle" className="text-sm font-medium flex items-center gap-1 cursor-pointer">
                     Screen Reader (TTS)
-                    <Volume2 className="h-3.5 w-3.5 text-muted-foreground" />
-                  </span>
+                    <Volume2 className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
+                  </label>
                   <span className="text-[10px] text-muted-foreground">Reads pages aloud</span>
                 </div>
                 <input
+                  id="screen-reader-toggle"
                   type="checkbox"
                   checked={settings.screenReader}
                   onChange={(e) => {
@@ -129,24 +138,25 @@ export const AccessibilityPanel: React.FC = () => {
                     if (e.target.checked) setTimeout(handleTtsTest, 300);
                     else stopSpeaking();
                   }}
-                  className="rounded border-border text-primary focus:ring-primary h-4 w-4"
+                  className="rounded border-border text-primary focus:ring-primary h-4 w-4 cursor-pointer"
                 />
               </div>
 
               {/* Voice Navigation Toggle */}
               <div className="flex items-center justify-between">
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium flex items-center gap-1">
+                  <label htmlFor="voice-nav-toggle" className="text-sm font-medium flex items-center gap-1 cursor-pointer">
                     Voice Commands
-                    <Mic className="h-3.5 w-3.5 text-muted-foreground" />
-                  </span>
+                    <Mic className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
+                  </label>
                   <span className="text-[10px] text-muted-foreground">Navigate by speech</span>
                 </div>
                 <input
+                  id="voice-nav-toggle"
                   type="checkbox"
                   checked={settings.voiceNav}
                   onChange={(e) => updateSettings({ voiceNav: e.target.checked })}
-                  className="rounded border-border text-primary focus:ring-primary h-4 w-4"
+                  className="rounded border-border text-primary focus:ring-primary h-4 w-4 cursor-pointer"
                 />
               </div>
             </div>
@@ -157,7 +167,7 @@ export const AccessibilityPanel: React.FC = () => {
                 onClick={() => speak(document.body.innerText)}
                 className="w-full mt-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 text-xs py-2 rounded font-semibold flex items-center justify-center gap-1.5 border border-border"
               >
-                <Activity className="h-3.5 w-3.5" />
+                <Activity className="h-3.5 w-3.5" aria-hidden="true" />
                 Read Full Page Text
               </button>
             )}

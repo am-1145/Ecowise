@@ -2,6 +2,7 @@
 
 import { describe, it, expect, jest } from '@jest/globals';
 import { OcrService } from '../services/ocrService';
+import tesseract from 'tesseract.js';
 
 // Mock Tesseract recognize to prevent real OCR execution/model downloads in unit tests
 jest.mock('tesseract.js', () => ({
@@ -55,5 +56,18 @@ describe('OcrService Tests', () => {
     expect(result.detectedItems.length).toBe(2); // mixed basket and fast fashion t-shirt
     expect(result.detectedItems[0].name).toBe('Standard Grocery Basket (Mixed)');
     expect(result.detectedItems[1].name).toBe('Fast Fashion T-shirt');
+  });
+
+  it('should fall back to filename-based mock text when Tesseract OCR fails', async () => {
+    // Dynamically make recognize reject with an error
+    (tesseract.recognize as jest.Mock).mockImplementationOnce(() => Promise.reject(new Error('OCR Engine Error')));
+
+    const fileBuffer = Buffer.from('failed document');
+    const result = await OcrService.parseBillOrReceipt(fileBuffer, 'electric_bill_fallback.png', 'bill');
+
+    expect(result.fileType).toBe('bill');
+    expect(result.totalConsumptionKwh).toBe(420);
+    expect(result.totalCost).toBe(75.6);
+    expect(result.estimatedCarbonImpact).toBe(168);
   });
 });
