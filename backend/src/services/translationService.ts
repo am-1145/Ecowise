@@ -94,6 +94,8 @@ const fallbackDicts: Record<string, Record<string, string>> = {
 };
 
 export class TranslationService {
+  private static readonly translationCache = new Map<string, string>();
+
   /**
    * Translates text to target language
    */
@@ -101,6 +103,13 @@ export class TranslationService {
     if (!text || !targetLang || targetLang.toLowerCase() === 'en') {
       return text;
     }
+
+    const cacheKey = `${targetLang.toLowerCase()}:${text}`;
+    if (this.translationCache.has(cacheKey)) {
+      return this.translationCache.get(cacheKey)!;
+    }
+
+    let translated = '';
 
     // Google Translation API Key check
     if (apiKey) {
@@ -120,31 +129,37 @@ export class TranslationService {
             .replace(/&amp;/g, '&')
             .replace(/&lt;/g, '<')
             .replace(/&gt;/g, '>');
-          return translatedText;
+          translated = translatedText;
         }
       } catch (error: any) {
         console.error('[TranslationService] Google Translate API error:', error?.response?.data || error.message);
       }
     }
 
-    // High fidelity mock translation fallback
-    const lang = targetLang.substring(0, 2).toLowerCase();
-    const dict = fallbackDicts[lang];
-    if (dict) {
-      let mockText = text;
-      // Simple word-by-word/phrase replacement for demo purposes if no key
-      for (const [key, value] of Object.entries(dict)) {
-        const regex = new RegExp(`\\b${key}\\b`, 'gi');
-        mockText = mockText.replace(regex, value);
+    if (!translated) {
+      // High fidelity mock translation fallback
+      const lang = targetLang.substring(0, 2).toLowerCase();
+      const dict = fallbackDicts[lang];
+      if (dict) {
+        let mockText = text;
+        // Simple word-by-word/phrase replacement for demo purposes if no key
+        for (const [key, value] of Object.entries(dict)) {
+          const regex = new RegExp(`\\b${key}\\b`, 'gi');
+          mockText = mockText.replace(regex, value);
+        }
+        // If no translation happened and we are demoing, add a visual indicator
+        if (mockText === text) {
+          translated = `[${targetLang.toUpperCase()}] ${text}`;
+        } else {
+          translated = mockText;
+        }
+      } else {
+        // If all else fails, return the original text
+        translated = `[${targetLang.toUpperCase()}] ${text}`;
       }
-      // If no translation happened and we are demoing, add a visual indicator
-      if (mockText === text) {
-        return `[${targetLang.toUpperCase()}] ${text}`;
-      }
-      return mockText;
     }
 
-    // If all else fails, return the original text
-    return `[${targetLang.toUpperCase()}] ${text}`;
+    this.translationCache.set(cacheKey, translated);
+    return translated;
   }
 }

@@ -124,9 +124,9 @@ export const RoutePlanner: React.FC = () => {
                   <div key={idx} className="p-3 bg-secondary/50 border border-border rounded-xl flex flex-col justify-between">
                     <div>
                       <span className="text-[10px] text-muted-foreground uppercase font-semibold block">{mode.mode}</span>
-                      <span className="text-base font-bold text-foreground mt-1">{mode.carbonKg} kg CO₂</span>
+                      <span className="text-base font-bold text-foreground mt-1">{mode.carbonEmissionKg} kg CO₂</span>
                     </div>
-                    <span className="text-[10px] text-muted-foreground font-semibold mt-1">🕒 {mode.duration}</span>
+                    <span className="text-[10px] text-muted-foreground font-semibold mt-1">🕒 {mode.durationMinutes} mins</span>
                   </div>
                 ))}
               </div>
@@ -163,13 +163,21 @@ export const RoutePlanner: React.FC = () => {
                 <div key={idx} className="p-3 bg-secondary/30 hover:bg-secondary/60 border border-border rounded-xl text-xs space-y-1 transition-all duration-200">
                   <div className="flex justify-between items-start">
                     <p className="font-bold text-foreground truncate max-w-[150px]">{poi.name}</p>
-                    <span className="text-[9px] font-bold py-0.5 px-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary uppercase">
-                      {poi.type}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      {poi.rating && (
+                        <span className="text-amber-500 font-bold text-[10px]">⭐ {poi.rating}</span>
+                      )}
+                      <span className="text-[9px] font-bold py-0.5 px-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary uppercase">
+                        {poi.type}
+                      </span>
+                    </div>
                   </div>
                   <p className="text-[10px] text-muted-foreground leading-relaxed">{poi.address}</p>
+                  {poi.details && (
+                    <p className="text-[10px] text-muted-foreground italic leading-relaxed mt-1">{poi.details}</p>
+                  )}
                   <div className="flex justify-between items-center pt-1 text-[10px] text-muted-foreground">
-                    <span>📍 {poi.distanceMiles} Miles</span>
+                    <span>📍 {poi.distanceMiles ? `${poi.distanceMiles.toFixed(1)} Miles` : 'Nearby'}</span>
                     {poi.chargingPorts && (
                       <span className="font-bold text-primary">⚡ {poi.chargingPorts} Ports</span>
                     )}

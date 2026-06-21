@@ -91,12 +91,63 @@ export class AdminController {
         total: Math.round(sums.total / count)
       };
 
-      // Default recommendations
-      const recommendations = [
+      // Dynamic category-based recommendations
+      const categoryTips: Record<string, string[]> = {
+        transportation: [
+          'Swap 3 solo driving commutes with public transit (bus/metro) or cycling.',
+          'Consider carpooling with coworkers or neighbors to decrease transport emissions.',
+          'Keep your vehicle tires properly inflated to optimize fuel economy by up to 3%.'
+        ],
+        energy: [
+          'Unplug electronic appliances in standby mode to prevent phantom power leaks.',
+          'Lower your heating/cooling thermostat by 1-2 degrees to save on energy costs.',
+          'Transition traditional home light bulbs to high-efficiency LED alternatives.'
+        ],
+        food: [
+          'Substitute beef/pork meals with plant-based or vegetarian options 3 times a week.',
+          'Plan meals ahead to minimize household organic food waste.',
+          'Support local farmer markets to reduce secondary transport emissions ("food miles").'
+        ],
+        shopping: [
+          'Avoid purchasing fast-fashion items; source high-quality, durable, or second-hand products.',
+          'Consolidate online deliveries into a single package to minimize packaging waste.',
+          'Choose products with minimal or biodegradable packaging materials.'
+        ],
+        waste: [
+          'Separate recyclables carefully and minimize single-use plastics.',
+          'Set up a home composting bin for organic food scraps.',
+          'Reuse glass jars and packaging containers to divert items from landfills.'
+        ],
+        water: [
+          'Install water-saving aerators on kitchen faucets and showerheads.',
+          'Run only full loads in dishwasher and washing machines.',
+          'Check household plumbing fixtures for leaks to save thousands of liters annually.'
+        ]
+      };
+
+      // Rank categories by value (highest to lowest)
+      const sortedCategories = Object.entries(stats)
+        .filter(([k]) => k !== 'total')
+        .sort((a, b) => b[1] - a[1]);
+
+      const recommendations: string[] = [];
+      for (let i = 0; i < Math.min(3, sortedCategories.length); i++) {
+        const cat = sortedCategories[i][0];
+        const tips = categoryTips[cat] || [];
+        if (tips.length > 0) {
+          recommendations.push(tips[0]);
+        }
+      }
+
+      const defaults = [
         'Replace 3 car trips a week with public transit or bicycle commutes.',
         'Install energy-saving LED lighting and power-down appliances in standby modes.',
         'Opt for plant-based or vegetarian food menus 3 times a week.'
       ];
+      while (recommendations.length < 3) {
+        const nextDefault = defaults.find(d => !recommendations.includes(d)) || defaults[0];
+        recommendations.push(nextDefault);
+      }
 
       const goalsList = goals.map(g => ({
         title: g.title,

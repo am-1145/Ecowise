@@ -3,7 +3,12 @@ import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
 import { AuthRequest } from '../middleware/auth';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_jwt_key_123456';
+const JWT_SECRET = (() => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET is required (set it in backend/.env)');
+  }
+  return process.env.JWT_SECRET;
+})();
 
 export class AuthController {
   /**

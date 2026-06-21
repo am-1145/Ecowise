@@ -1,5 +1,22 @@
-import { TranslationService } from '../services/translationService';
-import { MistralService } from '../services/mistralService';
+/// <reference types="jest" />
+
+import { describe, it, expect, jest } from '@jest/globals';
+import axios from 'axios';
+
+// Mock axios globally to throw an error to force fallback mock mode in unit tests
+jest.mock('axios', () => ({
+  post: jest.fn().mockImplementation(() => Promise.reject(new Error('API request disabled in unit tests'))),
+  get: jest.fn().mockImplementation(() => Promise.reject(new Error('API request disabled in unit tests')))
+}));
+
+// Reset env vars and module registry so that services execute their module scope with empty keys
+process.env.GOOGLE_TRANSLATE_API_KEY = '';
+process.env.MISTRAL_API_KEY = '';
+
+jest.resetModules();
+
+const { TranslationService } = require('../services/translationService');
+const { MistralService } = require('../services/mistralService');
 
 describe('TranslationService Tests', () => {
   it('should return original text if target language is English', async () => {

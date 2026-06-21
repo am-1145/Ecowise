@@ -11,8 +11,9 @@ const app = express();
 app.use(helmet());
 
 // Enable Cross-Origin Resource Sharing for the frontend development port
+const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173';
 app.use(cors({
-  origin: '*', // In production, narrow this to specific allowed client domain names
+  origin: corsOrigin,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));

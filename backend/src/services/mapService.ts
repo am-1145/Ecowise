@@ -15,6 +15,8 @@ export interface INearbyService {
   lng: number;
   rating: number;
   details: string;
+  distanceMiles?: number;
+  chargingPorts?: number;
 }
 
 export class MapService {
@@ -91,7 +93,8 @@ export class MapService {
         lat: lat + 0.008,
         lng: lng - 0.005,
         rating: 4.8,
-        details: 'Accepts plastics, metals, paper, and electronic waste (e-waste).'
+        details: 'Accepts plastics, metals, paper, and electronic waste (e-waste).',
+        distanceMiles: 0.8
       },
       {
         name: 'Voltaic Level 3 Fast EV Station',
@@ -100,7 +103,9 @@ export class MapService {
         lat: lat - 0.006,
         lng: lng + 0.009,
         rating: 4.7,
-        details: '2x 150kW CCS chargers, 1x CHAdeMO plug. 100% renewable power.'
+        details: '2x 150kW CCS chargers, 1x CHAdeMO plug. 100% renewable power.',
+        distanceMiles: 1.2,
+        chargingPorts: 4
       },
       {
         name: 'Solace Clean Energy Solutions',
@@ -109,7 +114,8 @@ export class MapService {
         lat: lat + 0.012,
         lng: lng + 0.004,
         rating: 4.9,
-        details: 'Local residential solar panel installers and smart home energy audits.'
+        details: 'Local residential solar panel installers and smart home energy audits.',
+        distanceMiles: 2.1
       },
       {
         name: 'The Zero Waste Grocery Store',
@@ -118,7 +124,8 @@ export class MapService {
         lat: lat - 0.003,
         lng: lng - 0.007,
         rating: 4.6,
-        details: 'Organic grains, beans, soaps, and produce in bulk. Bring your own containers!'
+        details: 'Organic grains, beans, soaps, and produce in bulk. Bring your own containers!',
+        distanceMiles: 0.5
       }
     ];
   }

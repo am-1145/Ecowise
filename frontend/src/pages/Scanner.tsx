@@ -98,7 +98,7 @@ export const Scanner: React.FC = () => {
         <div className="bg-card border border-border rounded-2xl p-6 shadow-sm lg:col-span-2 glass-card flex flex-col justify-between">
           <form onSubmit={handleUpload} className="space-y-6">
             <div>
-              <label htmlFor="doc-type-select" className="text-sm font-semibold block mb-2">Document Category</label>
+              <span className="text-sm font-semibold block mb-2">Document Category</span>
               <div className="grid grid-cols-2 gap-4">
                 <button
                   type="button"

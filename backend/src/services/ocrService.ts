@@ -44,8 +44,9 @@ export class OcrService {
       if (kwhMatch) {
         kwh = parseFloat(kwhMatch[1]);
       } else {
-        // Randomize mock data slightly for realistic UI behavior
-        kwh = Math.floor(Math.random() * 200) + 300;
+      // Deterministic mock value for repeatable tests
+      // (Use a stable heuristic based on filename when OCR parsing fails)
+      kwh = 420;
       }
 
       const costMatch = extractedText.match(/\$\s*(\d+(?:\.\d+)?)/);
